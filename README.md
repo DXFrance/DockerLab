@@ -5,7 +5,7 @@
 Le but de ce lab est de vous permettre de déployer une application ASP.NET Core dans un conteneur Docker, sur une machine Linux hébergée sur la plateforme cloud Microsoft Azure. 
 Il est entièrement réalisable depuis un post sous Linux, MacOS ou Windows.
 
-ASP.NET Core 1.0 est une technologie qui permet de déployer des applications web à l'aide du langage C# et qui a été pensé pour s'exécuter sur n'importe quelle plateforme Linux, Mac OS ou Windows.
+ASP.NET Core 1.0 est une technologie qui permet de développer des applications web à l'aide du langage C# et qui a été pensé pour s'exécuter sur n'importe quelle plateforme Linux, Mac OS ou Windows.
 La documentation est disponible sur la page : https://docs.asp.net/en/latest/
 
 Pour ce lab, vous n'avez pas besoin de connaître cette technologie puisque nous vous fournissons une application d'exemple que vous allez déployer à l'aide des outils Docker sur la plateforme Microsoft Azure.
