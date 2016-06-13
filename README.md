@@ -131,3 +131,89 @@ Votre environnement est prêt ! Pour valider que tout est bon, vous pouvez taper
     docker info
 
 Cette commande doit vous afficher les informations propres au deamon Docker qui s'exécute sur la machine virtuelle dans Microsoft Azure.
+
+## Création de l'image Docker pour l'application Asp.Net Core 1.0
+
+Pour commencez, faites un clone du repository GitHub sur votre machine pour récupérer les sources de l'application : https://github.com/DXFrance/DockerLab.git
+
+Une fois ceci fait, naviguez vers le dossier **src**. Celui-ci contient un fichier **Dockerfile** qui défini comment l'image Docker qui sera utilisée pour exécuter l'application Asp.Net Core doit être créée:
+
+    # Utilisation de l'image de base fournie par Microsoft pour exécuter des applications .NET Core sous Linux
+    FROM microsoft/dotnet:1.0.0-preview1
+
+    # Définition de la personne qui maintient le projet
+    MAINTAINER Julien Corioland, Microsoft France, @jcorioland
+
+    # Définition du port sur lequel l'application va s'exécuter à l'intérieur du conteneur
+    EXPOSE 5000
+
+    # Définition du point d'entrée de l'application (exécuté au démarrage du conteneur)
+    ENTRYPOINT ["dotnet", "run"]
+
+    # Copie du contenu du répertoire HelloAspNet local à l'intérieur du conteneur dans le répertoire /app
+    ADD ./HelloAspNet/ ./app
+
+    # Définition du répertoire courant
+    WORKDIR /app
+
+    # Restauration des dépendences du projet et compilation de l'application
+    RUN dotnet restore
+    RUN dotnet build 
+
+Comme vous pouvez le constater, ce fichier décrit les différentes actions à réaliser pour créer l'image.
+
+* La directive *FROM* permet d'indiquer quelle est l'image qui servira de base. En l'occurence, nous utilisons ici l'image officielle de Dotnet Core sous Linux fournie par Microsoft.
+* La directive *MAINTAINER* permet de définir l'auteur de l'image
+* La directive *EXPOSE* permet d'exposer un port à l'extérieur du conteneur (celui sur lequel s'exécutera l'application, ici 5000)
+* La directive *ENTRYPOINT* permet de définir la commande qui sera exécutée au démarrage du conteneur, ici : *dotnet run*
+* La directive *ADD* permet d'envoyer le contenu du répertoire **HelloAspNet** de votre poste client au dossier **/app** à l'intérieur du conteneur
+* La directive *WORKDIR* permet de définir le répertoire de travail courant
+* La directive *RUN* permet d'exécuter une commande à l'intérieur du répertoire. Ici, nous en exécutant deux : *dotnet restore* qui permet de récupérer les dépendences de l'application et *dotnet build* qui permet de compiler l'application.
+
+Pour obtenir une image à partir d'un fichier Dockerfile, il suffit de taper la commande suivante :
+
+    docker build -t <nom_de_votre_image> .
+
+En remplaçant <nom_de_votre_image> par le nom que vous souhaitez donner à votre image.
+
+Il est important de comprendre que ce qu'il se passe en réalité, c'est que tout le contexte qui est sur votre poste (le Dockerfile ainsi que les fichiers du dossier HelloAspNet) vont être envoyé au deamon Docker qui tourne sur la machine virtuelle distante, dans Microsoft Azure. Et c'est ensuite sur cette machine distante que l'image va être créée !
+
+Patientez pendant la création de l'image, cela peut prendre quelques minutes. Vous pouvez valider que votre image a bien été créée, vous pouvez taper la commande :
+
+    docker images
+
+Cette commande affiche toutes les images qui sont disponibles sur la machine Docker.
+
+## Exécution de l'application dans un conteneur Docker
+
+Maintenant que l'image a été créée, il est possible d'instancier un conteneur à partir de celle-ci, à l'aide de la commande :
+
+    docker run -d -p 80:5000 --name <nom_conteneur> <nom_de_votre_image>
+
+En remplaçant <nom_conteneur> par le nom que vous souhaitez donner à votre conteneur et <nom_de_votre_image> par le nom que vous avez donné à l'image lors de sa création.
+
+L'option *-d* permet d'indiquer que le conteneur doit tourner en tâche de fond et l'option *-p* qui permet d'indiquer que le port 5000 exposé par le conteneur doit être mappé sur le port 80 de la machine virtuelle hôte.
+
+Une fois le conteneur lancé vous pouvez valider qu'il est en cours d'exécution en tapant la commande :
+
+    docker ps -a
+
+## Configuration du Firewall et connexion à l'application
+
+Et bien évidemment vous pouvez vous connecter à l'application. Pour se faire, rendez-vous sur le portail Microsoft Azure (https://portal.azure.com) et authentifiez vous avec votre compte. A l'aide du menu de gauche, parcourez les groupes de ressources. Vous devez voir un groupe de ressource nommé *docker-machine* qui contient toutes les ressources qui ont été créée pour votre machine virtuelle (compte de stockage, carte réseau, firewall...) et notamment une IP publique :
+
+Vous pourrez alors récupérer l'IP publique de votre machine virtuelle via cette interface, et vous y connecter :
+
+![Récupération de l'IP publique](https://github.com/DXFrance/DockerLab/blob/master/medias/public_ip.png)
+
+Une autre solution est d'utiliser Docker Machine et la commande : 
+
+    docker-machine ip <nom_de_votre_vm>
+
+Si vous tentez de vous connecter à la machine en http en utilisant l'IP que vous venez de récupérer, vous constaterez que la page web ne s'affiche pas, tout simplement car vous n'avez pas autorisé le trafic entrant sur le port 80 au niveau du firewall de la machine virtuelle.
+Retournez sur le portail Microsoft Azure, et cliquez cette fois sur le firewall, puis sur *Règles de sécurité de trafic entrant* dans le menu de droite. Dans l'interface qui s'ouvre, cliquez sur le bouton **+** et ajoutez une règle pour autoriser le port 80 :
+
+![Récupération de l'IP publique](https://github.com/DXFrance/DockerLab/blob/master/medias/add_trafic_inbound.png)
+
+Validez en cliquant sur OK et patientez quelques instants le temps que la règle s'applique. Vous pouvez alors vous tenter de parcourir l'application web à nouveau, à partir de l'IP de la machine.
+Cette fois, tout devrait fonctionner !
