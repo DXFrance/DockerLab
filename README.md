@@ -25,12 +25,12 @@ Pour la connexion à GitHub, vous pouvez utiliser les outils Git pour Mac OS (ht
 Les outils Docker sont disponibles au travers de la Docker Toolbox qui est disponible en téléchargement sur cette page : https://www.docker.com/products/docker-toolbox.
 Toutes les étapes à effectuer pour installer cet outil sont décrites sur cette page : https://docs.docker.com/mac/step_one/
 
-Une fois les outils Docker installés, téléchargez la version Mac OS de Visual Studio Code depuis https://go.microsoft.com/fwlink/?LinkID=534106.
-Dézippez l'archive puis faites un "Drag & Drop" de Visual Studio Code.app dans votre dossier application et éventuellement, ajoutez-le à votre Docker pour le retrouver facilement.
+Une fois les outils Docker installés, exécuté la ligne de commande suivante pour mettre à jour la dernière version de Docker Machine :
 
-Lancez Visual Studio Code pour valider que tout est OK.
-Vous êtes prêt pour démarrer le lab !
+    curl -L https://github.com/docker/machine/releases/download/v0.8.0-rc1/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
+    chmod +x /usr/local/bin/docker-machine
 
+Vous êtes prêt !
 
 ### Windows
 
