@@ -200,7 +200,9 @@ Une fois ceci fait, naviguez vers le dossier **src**. Celui-ci contient un fichi
     RUN dotnet restore
     RUN dotnet build 
 
-Comme vous pouvez le constater, ce fichier décrit les différentes actions à réaliser pour créer l'image.
+Les Dockerfile définissent une liste de commande qui permettent de définir les étapes de création des différentes couches qui composent une image Docker. Ils sont ensuite "compilés" pour créer la dite image.
+
+Voici un descriptif des différentes commandes utilisés dans ce fichier :
 
 * La directive *FROM* permet d'indiquer quelle est l'image qui servira de base. En l'occurence, nous utilisons ici l'image officielle de Dotnet Core sous Linux fournie par Microsoft.
 * La directive *MAINTAINER* permet de définir l'auteur de l'image
