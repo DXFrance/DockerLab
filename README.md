@@ -132,6 +132,46 @@ Votre environnement est prêt ! Pour valider que tout est bon, vous pouvez taper
 
 Cette commande doit vous afficher les informations propres au deamon Docker qui s'exécute sur la machine virtuelle dans Microsoft Azure.
 
+Vous pouvez ensuite commencer à taper quelques commandes Docker pour vous familiariser avec l'outil, par exemple :
+
+* La commande **docker pull** vous permet de télécharger une image depuis le hub public Docker :
+
+    docker pull ubuntu:latest
+
+* La commande **docker run** vous permet de créer un nouveau conteneur à partir de l'image téléchargée :
+
+    docker run ubuntu /bin/echo 'Hello world'
+
+* La commande **docker ps -a** vous permet d'afficher tous les conteneurs (en cours d'exécution ou non) sur votre machine hôte :
+
+    docker ps -a
+
+* La commande **docker rm** vous permet de supprimer un conteneur à partir de son nom ou son id :
+
+    docker rm <id du conteneur>
+
+* Vous pouvez également télécharger l'image nginx à l'aide de la commande :
+
+    docker pull nginx:latest
+
+* Puis instancier un conteneur nginx en arrière plan à l'aide de l'option -d et exposer les ports à l'extérieur du conteneur avec l'option -p :
+
+    docker run -d -p 80:80 nginx
+
+* Si vous refaite un **docker ps** vous verrez votre conteneur en cours d'exécution
+
+    docker ps
+
+* La commande **docker stop** vous permet de stopper un conteneur, sans le supprimer :
+
+    docker stop <id conteneur>
+
+* Enfin, la commande **docker start** vous permet de relancer un conteneur déjà existant à partir de son id ou nom :
+
+    docker start <id conteneur>
+
+Voilà pour le tour d'horizon des commandes Docker principales qui vous serviront dans la suite de TP. Pour une liste complète, rendez-vous sur la documentation officielle Docker : https://docs.docker.com/engine/reference/commandline/cli/
+
 ## Création de l'image Docker pour l'application Asp.Net Core 1.0
 
 Pour commencez, faites un clone du repository GitHub sur votre machine pour récupérer les sources de l'application : https://github.com/DXFrance/DockerLab.git
