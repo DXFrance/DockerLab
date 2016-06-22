@@ -259,3 +259,5 @@ Retournez sur le portail Microsoft Azure, et cliquez cette fois sur le firewall,
 
 Validez en cliquant sur OK et patientez quelques instants le temps que la règle s'applique. Vous pouvez alors vous tenter de parcourir l'application web à nouveau, à partir de l'IP de la machine.
 Cette fois, tout devrait fonctionner !
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
